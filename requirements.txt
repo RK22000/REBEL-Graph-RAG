@@ -8,4 +8,5 @@ torch
 ipywidgets
 pandas
 fastapi[standard]
+-e file:.
 
