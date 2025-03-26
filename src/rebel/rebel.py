@@ -31,7 +31,7 @@ def extract_triplets(text):
         triplets.append({'head': subject.strip(), 'type': relation.strip(),'tail': object_.strip()})
     return triplets
 
-def make_kb(text):
+def make_kb(text, **kwargs):
 
     # Load model and tokenizer
     tokenizer = AutoTokenizer.from_pretrained("Babelscape/rebel-large")
@@ -42,12 +42,13 @@ def make_kb(text):
         "num_beams": 3,
         "num_return_sequences": 3,
     }
+    gen_kwargs.update(kwargs)
 
     # Text to extract triplets from
     # text = 'Punta Cana is a resort town in the municipality of Higüey, in La Altagracia Province, the easternmost province of the Dominican Republic.'
 
     # Tokenizer text
-    model_inputs = tokenizer(text, max_length=256, padding=True, truncation=True, return_tensors = 'pt')
+    model_inputs = tokenizer(text, max_length=gen_kwargs['max_length'], padding=True, truncation=True, return_tensors = 'pt')
 
     # Generate
     generated_tokens = model.generate(

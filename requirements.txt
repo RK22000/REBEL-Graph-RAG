@@ -7,3 +7,5 @@ notebook
 torch
 ipywidgets
 pandas
+fastapi[standard]
+
