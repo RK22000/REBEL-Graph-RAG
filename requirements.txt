@@ -7,6 +7,15 @@ notebook
 torch
 ipywidgets
 pandas
+networkx
+matplotlib
+langchain
+langchain_deepseek
+langchain_community 
+langchain_core
+langgraph
+nx-arangodb
+uvicorn
 fastapi[standard]
 -e file:.
 
