@@ -19,7 +19,7 @@ async def text_to_kb(input: TextInput) -> Dict[str, Any]:
             G.add_edge(node1, node2, relationship=relation)
 
         G_adb = nxadb.Graph(
-            name="node2vec",
+            name=input.db_name,
             db=db,
             incoming_graph_data=G,
             write_batch_size=50000 
@@ -35,15 +35,7 @@ async def query_kb(input: QueryInput) -> Dict[str, str]:
     Query the knowledge base using natural language
     """
     try:
-        G_adb = nxadb.Graph(name="node2vec", db=db)
-
-        graph = ArangoGraph(db=db)
-        qa_chain = ArangoGraphQAChain.from_llm(
-            llm=llm,
-            graph=graph, allow_dangerous_requests=True
-        )
-        result = qa_chain.run(input.query)
-        
+        result = query_graph(input.query)
         return {"result": result}
     except Exception as e:
         logger.error(f"Error querying knowledge base: {str(e)}")
