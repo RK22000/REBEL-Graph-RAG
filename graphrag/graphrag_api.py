@@ -3,34 +3,23 @@ import networkx as nx
 import nx_arangodb as nxadb
 from langchain_community.graphs import ArangoGraph
 from langchain_community.chains.graph_qa.arangodb import ArangoGraphQAChain
-
+from langchain_core.tools import tool
 from graphrag_utils import *
+import logging
+logger = logging.getLogger(__name__)
+from fastapi import HTTPException
 
-@app.post("/text-to-kb")
-async def text_to_kb(input: TextInput) -> Dict[str, Any]:
-    """
-    Convert text input to knowledge base using REBEL and store in ArangoDB
-    """
-    try:
-        edge_list = text2kb(input.text)
-        G = nx.DiGraph()
+from dotenv import load_dotenv
 
-        for node1, relation, node2 in edge_list:
-            G.add_edge(node1, node2, relationship=relation)
+import requests
+import json
 
-        G_adb = nxadb.Graph(
-            name=input.db_name,
-            db=db,
-            incoming_graph_data=G,
-            write_batch_size=50000 
-        )
-        return {"message": "Knowledge base created successfully", "data": edge_list}
-    except Exception as e:
-        logger.error(f"Error creating knowledge base: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+load_dotenv()
+
+db = ArangoClient(hosts=os.getenv("ARANGODB_URL")).db(username="root", password=os.getenv("ARANGODB_PASS"), verify=True)
 
 @app.post("/query")
-async def query_kb(input: QueryInput) -> Dict[str, str]:
+async def query_kb(input):
     """
     Query the knowledge base using natural language
     """
@@ -41,6 +30,9 @@ async def query_kb(input: QueryInput) -> Dict[str, str]:
         logger.error(f"Error querying knowledge base: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000) 
+    uvicorn.run(app, host="0.0.0.0", port=8001) 
+
+
