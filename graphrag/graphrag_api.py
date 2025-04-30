@@ -7,32 +7,48 @@ from langchain_core.tools import tool
 from graphrag_utils import *
 import logging
 logger = logging.getLogger(__name__)
-from fastapi import HTTPException
-
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from arango import ArangoClient
+import os
 from dotenv import load_dotenv
-
 import requests
 import json
+from fastapi.middleware.cors import CORSMiddleware
+
+
+app = FastAPI(title="GraphRAG API", description="API for querying knowledge graphs")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # React development server
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 load_dotenv()
 
-db = ArangoClient(hosts=os.getenv("ARANGODB_URL")).db(username="root", password=os.getenv("ARANGODB_PASS"), verify=True)
+
+
+db = ArangoClient(hosts=ARANGO_URL).db(username=ARANGO_USER, password=ARANGO_PASS, verify=True)
+
+class QueryRequest(BaseModel):
+    query: str
 
 @app.post("/query")
-async def query_kb(input):
+async def query_kb(request: QueryRequest):
     """
     Query the knowledge base using natural language
     """
     try:
-        result = query_graph(input.query)
+        result = query_graph(request.query)
         return {"result": result}
     except Exception as e:
         logger.error(f"Error querying knowledge base: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8001) 
+    uvicorn.run(app, host="0.0.0.0", port=8000) 
 
 
