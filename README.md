@@ -23,3 +23,5 @@ curl -X POST \
     "query": "What is the relationship between Node2Vec and random walks?"
   }'
 ```
+
+curl -X POST http://localhost:8001/query -H 'Content-Type: application/json' -d '{"query": "What is the relationship between Node2Vec and random walks?"}'
