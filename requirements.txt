@@ -17,6 +17,5 @@ langgraph
 nx-arangodb
 uvicorn
 fastapi[standard]
--e file:.
 wikipedia-api==0.6.0
 
