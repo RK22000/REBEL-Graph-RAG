@@ -1,4 +1,6 @@
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+import torch
+import tqdm
 
 def extract_triplets(text):
     triplets = []
@@ -30,6 +32,55 @@ def extract_triplets(text):
     if subject != '' and relation != '' and object_ != '':
         triplets.append({'head': subject.strip(), 'type': relation.strip(),'tail': object_.strip()})
     return triplets
+
+
+def infer_batch(batch, model, tokenizer):
+    output_tokens = model.generate(
+        input_ids = batch,
+        attention_mask = torch.ones_like(batch)
+    )
+    sentenses = tokenizer.batch_decode(output_tokens)
+    return sentenses
+def extract_knowledge_graph(
+    text: str,
+    span_length: int,
+    batch_size: int,
+    prog_bar: bool = False
+):
+    print("START: loading models")
+    tokenizer = AutoTokenizer.from_pretrained("Babelscape/rebel-large")
+    model = AutoModelForSeq2SeqLM.from_pretrained("Babelscape/rebel-large")
+    print("DONE: loading models")
+    print("START: tokenizing input")
+    tokens = tokenizer(text, return_tensors='pt')
+    print("DONE: tokenizing input")
+    input_ids = tokens['input_ids'].squeeze()
+    input_ids
+    num_spans = input_ids.shape[0]//span_length
+    reshaped_input_ids = input_ids[:num_spans*span_length].reshape(num_spans, span_length)
+    num_batches = reshaped_input_ids.shape[0]//batch_size
+    batched_inputs = reshaped_input_ids[:num_batches*batch_size, :span_length].reshape(num_batches, batch_size, span_length)
+    iterator = tqdm if prog_bar else iter
+    print("START: knowledge graph extration")
+    relations = []
+    try:
+        for batch in iterator(batched_inputs):
+            sentenses = infer_batch(batch, model, tokenizer)
+            for sentense in sentenses:
+                triplets = extract_triplets(sentense)
+                relations.extend(triplets)
+        print("DONE: knowledge graph extration")
+    except KeyboardInterrupt:
+        print("INTERUPTED: knowledge graph extration")
+        pass
+    print("START: make knowledge graph table")
+    kb = set()
+    for link in relations:
+        kb.add((link['head'], link['type'], link['tail']))
+    print("DONE: make knowledge graph table")
+    return kb
+
+    
 
 def make_kb(text, **kwargs):
 
