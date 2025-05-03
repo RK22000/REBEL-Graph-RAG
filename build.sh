@@ -6,8 +6,6 @@ npm install --include=dev
 npm run build
 cd ..
 
-pip install -r requirements.txt
-
 mkdir -p static
 cp -r UI/dist/* static/
 

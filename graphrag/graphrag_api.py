@@ -8,6 +8,8 @@ from graphrag_utils import *
 import logging
 logger = logging.getLogger(__name__)
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from arango import ArangoClient
 import os
@@ -15,7 +17,6 @@ from dotenv import load_dotenv
 import requests
 import json
 from fastapi.middleware.cors import CORSMiddleware
-
 
 app = FastAPI(title="GraphRAG API", description="API for querying knowledge graphs")
 app.add_middleware(
@@ -26,14 +27,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.mount("/", StaticFiles(directory="UI/dist", html=True), name="static")
+
 load_dotenv()
-
-
 
 db = ArangoClient(hosts=ARANGO_URL).db(username=ARANGO_USER, password=ARANGO_PASS, verify=True)
 
 class QueryRequest(BaseModel):
     query: str
+
+@app.get("/health")
+async def health_check():
+    """
+    Health check endpoint
+    """
+    return {"status": "healthy", "message": "GraphRAG API is running"}
 
 @app.post("/query")
 async def query_kb(request: QueryRequest):
