@@ -27,7 +27,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/", StaticFiles(directory="UI/dist", html=True), name="static")
+app.mount("/", StaticFiles(directory="../UI/dist", html=True), name="static")
 
 load_dotenv()
 
