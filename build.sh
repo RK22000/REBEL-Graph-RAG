@@ -11,4 +11,4 @@ pip install -r requirements.txt
 mkdir -p static
 cp -r UI/dist/* static/
 
-uvicorn app:app --host 0.0.0.0 --port 8000
+uvicorn graphrag/graphrag_api:app --host 0.0.0.0 --port 8000
