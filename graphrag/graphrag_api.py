@@ -19,6 +19,8 @@ import json
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="GraphRAG API", description="API for querying knowledge graphs")
+
+# Add CORS middleware first
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "https://rebel-graph-rag-1.onrender.com"],  # React development server and production
@@ -27,15 +29,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/", StaticFiles(directory="../UI/dist", html=True), name="static")
-
-load_dotenv()
-
-db = ArangoClient(hosts=ARANGO_URL).db(username=ARANGO_USER, password=ARANGO_PASS, verify=True)
-
-class QueryRequest(BaseModel):
-    query: str
-
+# Define API routes before mounting static files
 @app.get("/health")
 async def health_check():
     """
@@ -54,6 +48,16 @@ async def query_kb(request: QueryRequest):
     except Exception as e:
         logger.error(f"Error querying knowledge base: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+app.mount("/", StaticFiles(directory="../UI/dist", html=True), name="static")
+
+load_dotenv()
+
+db = ArangoClient(hosts=ARANGO_URL).db(username=ARANGO_USER, password=ARANGO_PASS, verify=True)
+
+class QueryRequest(BaseModel):
+    query: str
 
 if __name__ == "__main__":
     import uvicorn
