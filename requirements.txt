@@ -16,6 +16,7 @@ langchain_core
 langgraph
 nx-arangodb
 uvicorn
+tqdm
 fastapi[standard]
 -e file:.
 

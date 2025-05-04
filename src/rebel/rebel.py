@@ -1,6 +1,13 @@
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 import torch
-import tqdm
+from tqdm import tqdm
+import signal
+import threading
+
+print("START: loading models", flush=True)
+tokenizer = AutoTokenizer.from_pretrained("Babelscape/rebel-large")
+model = AutoModelForSeq2SeqLM.from_pretrained("Babelscape/rebel-large")
+print("DONE: loading models", flush=True)
 
 def extract_triplets(text):
     triplets = []
@@ -36,8 +43,8 @@ def extract_triplets(text):
 
 def infer_batch(batch, model, tokenizer):
     output_tokens = model.generate(
-        input_ids = batch,
-        attention_mask = torch.ones_like(batch)
+        input_ids = batch.to(model.device),
+        attention_mask = torch.ones_like(batch).to(model.device)
     )
     sentenses = tokenizer.batch_decode(output_tokens)
     return sentenses
@@ -45,15 +52,17 @@ def extract_knowledge_graph(
     text: str,
     span_length: int,
     batch_size: int,
-    prog_bar: bool = False
+    device = torch.device('cpu'),
+    prog_bar: bool = False,
+    timeout_minutes: int = 5
 ):
-    print("START: loading models")
-    tokenizer = AutoTokenizer.from_pretrained("Babelscape/rebel-large")
-    model = AutoModelForSeq2SeqLM.from_pretrained("Babelscape/rebel-large")
-    print("DONE: loading models")
-    print("START: tokenizing input")
+    print("START: loading models", flush=True)
+    model.to(device)
+    print(f"model device: {model.device}", flush=True)
+    print("DONE: loading models", flush=True)
+    print("START: tokenizing input", flush=True)
     tokens = tokenizer(text, return_tensors='pt')
-    print("DONE: tokenizing input")
+    print("DONE: tokenizing input", flush=True)
     input_ids = tokens['input_ids'].squeeze()
     input_ids
     num_spans = input_ids.shape[0]//span_length
@@ -61,23 +70,38 @@ def extract_knowledge_graph(
     num_batches = reshaped_input_ids.shape[0]//batch_size
     batched_inputs = reshaped_input_ids[:num_batches*batch_size, :span_length].reshape(num_batches, batch_size, span_length)
     iterator = tqdm if prog_bar else iter
-    print("START: knowledge graph extration")
+    print("START: knowledge graph extration", flush=True)
     relations = []
+    timed_out=False
+    def trigger_timeout():
+        nonlocal timed_out
+        timed_out = True
+    timer = threading.Timer(timeout_minutes*60, trigger_timeout)
+    timer.start()
+    # def timeout(*args):
+    #     raise TimeoutError("Knowledge Graph Extration timed out")
+    # signal.signal(signal.SIGALRM, timeout)
+    # signal.alarm(timeout_minutes*60)
     try:
         for batch in iterator(batched_inputs):
+            if timed_out: raise TimeoutError("Knowledge Graph Extration timed out")
             sentenses = infer_batch(batch, model, tokenizer)
             for sentense in sentenses:
                 triplets = extract_triplets(sentense)
                 relations.extend(triplets)
-        print("DONE: knowledge graph extration")
-    except KeyboardInterrupt:
-        print("INTERUPTED: knowledge graph extration")
+        # signal.alarm(0)
+        print("DONE: knowledge graph extration", flush=True)
+    except (Exception, KeyboardInterrupt, TimeoutError) as e:
+        print(f"ERROR: {e}", flush=True)
+        print("INTERUPTED: knowledge graph extration", flush=True)
         pass
-    print("START: make knowledge graph table")
+    finally:
+        timer.cancel()
+    print("START: make knowledge graph table", flush=True)
     kb = set()
     for link in relations:
         kb.add((link['head'], link['type'], link['tail']))
-    print("DONE: make knowledge graph table")
+    print("DONE: make knowledge graph table", flush=True)
     return kb
 
     

@@ -1,0 +1,6 @@
+transformers 
+torch
+uvicorn
+tqdm
+fastapi[standard]
+
