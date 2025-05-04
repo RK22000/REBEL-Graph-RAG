@@ -29,6 +29,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+load_dotenv()
+db = ArangoClient(hosts=ARANGO_URL).db(username=ARANGO_USER, password=ARANGO_PASS, verify=True)
+
+class QueryRequest(BaseModel):
+    query: str
+
 # Define API routes before mounting static files
 @app.get("/health")
 async def health_check():
@@ -49,15 +55,8 @@ async def query_kb(request: QueryRequest):
         logger.error(f"Error querying knowledge base: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
+# Mount static files last
 app.mount("/", StaticFiles(directory="../UI/dist", html=True), name="static")
-
-load_dotenv()
-
-db = ArangoClient(hosts=ARANGO_URL).db(username=ARANGO_USER, password=ARANGO_PASS, verify=True)
-
-class QueryRequest(BaseModel):
-    query: str
 
 if __name__ == "__main__":
     import uvicorn
