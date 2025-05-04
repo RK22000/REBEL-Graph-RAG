@@ -18,5 +18,5 @@ nx-arangodb
 uvicorn
 tqdm
 fastapi[standard]
--e file:.
+wikipedia-api==0.6.0
 
