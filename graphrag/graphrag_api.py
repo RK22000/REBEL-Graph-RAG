@@ -8,6 +8,8 @@ from graphrag_utils import *
 import logging
 logger = logging.getLogger(__name__)
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from arango import ArangoClient
 import os
@@ -16,24 +18,24 @@ import requests
 import json
 from fastapi.middleware.cors import CORSMiddleware
 
-
 app = FastAPI(title="GraphRAG API", description="API for querying knowledge graphs")
+
+# Add CORS middleware first
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # React development server
+    allow_origins=["http://localhost:5173", "https://rebel-graph-rag-1.onrender.com"],  # React development server and production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-load_dotenv()
-
-
-
-db = ArangoClient(hosts=ARANGO_URL).db(username=ARANGO_USER, password=ARANGO_PASS, verify=True)
-
-class QueryRequest(BaseModel):
-    query: str
+# Define API routes before mounting static files
+@app.get("/health")
+async def health_check():
+    """
+    Health check endpoint
+    """
+    return {"status": "healthy", "message": "GraphRAG API is running"}
 
 @app.post("/query")
 async def query_kb(request: QueryRequest):
@@ -46,6 +48,16 @@ async def query_kb(request: QueryRequest):
     except Exception as e:
         logger.error(f"Error querying knowledge base: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+app.mount("/", StaticFiles(directory="../UI/dist", html=True), name="static")
+
+load_dotenv()
+
+db = ArangoClient(hosts=ARANGO_URL).db(username=ARANGO_USER, password=ARANGO_PASS, verify=True)
+
+class QueryRequest(BaseModel):
+    query: str
 
 if __name__ == "__main__":
     import uvicorn
