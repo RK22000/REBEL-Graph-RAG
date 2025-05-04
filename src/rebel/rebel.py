@@ -54,8 +54,12 @@ def extract_knowledge_graph(
     batch_size: int,
     device = torch.device('cpu'),
     prog_bar: bool = False,
-    timeout_minutes: int = 5
+    timeout_minutes: int = 5,
+    silent = True
 ):
+    if silent:
+        global print
+        print = lambda *args, **kwargs: None
     print("START: loading models", flush=True)
     model.to(device)
     print(f"model device: {model.device}", flush=True)
