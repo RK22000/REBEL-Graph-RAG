@@ -1,6 +1,7 @@
 .venv
+.env
 src/*.egg-info
 **/__pycache__
-.env/
 data/
+lib/
 demo*
