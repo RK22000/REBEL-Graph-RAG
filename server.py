@@ -15,6 +15,7 @@ class StatusCheck(BaseModel):
 
 app = FastAPI()
 
+
 @app.get('/healthy')
 def health_check() -> StatusCheck:
     logger.info("Health check ok")

@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 
@@ -12,6 +12,10 @@ COPY pyproject.toml /app/pyproject.toml
 RUN pip install .
 
 COPY server.py /app/server.py
+
+COPY init_rebel.py /app/init_rebel.py
+
+RUN python init_rebel.py
 
 EXPOSE 8000
 
