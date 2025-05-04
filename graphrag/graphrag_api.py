@@ -21,7 +21,7 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI(title="GraphRAG API", description="API for querying knowledge graphs")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # React development server
+    allow_origins=["http://localhost:5173", "https://rebel-graph-rag-1.onrender.com"],  # React development server and production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
