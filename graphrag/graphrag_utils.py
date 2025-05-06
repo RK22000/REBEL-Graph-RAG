@@ -130,6 +130,7 @@ def text_to_aql_to_text(query: str, eval: bool = False):
         return_aql_query=True,
         allow_dangerous_requests=True
     )
+    print("In text_to_aql_to_text...")
     final_query = f"""I have a NetworkX Graph called `G_adb`. It has the following schema: {arango_graph.schema}
 
     I have the following question: {query}.
@@ -405,6 +406,7 @@ def text_to_nx_algorithm_to_text(query):
 tools = [text_to_aql_to_text, text_to_nx_algorithm_to_text]
 
 def query_graph(query):
+    print("In query_graph...")
     app = create_react_agent(llm, tools)
     final_state = app.invoke({"messages": [{"role": "user", "content": query}]})
     return final_state["messages"][-1].content

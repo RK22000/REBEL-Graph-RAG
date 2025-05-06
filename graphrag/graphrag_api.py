@@ -49,6 +49,7 @@ async def query_kb(request: QueryRequest):
     Query the knowledge base using natural language
     """
     try:
+        print("Querying knowledge base...")
         result = query_graph(request.query)
         return {"result": result}
     except Exception as e:
