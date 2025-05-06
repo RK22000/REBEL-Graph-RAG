@@ -1,0 +1,456 @@
+[
+    {
+        "query": "What are the capitals of all Indian states?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'India'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'capital of'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Maharashtra", "relation": "capital of", "tail": "Mumbai"},
+            {"head": "Karnataka", "relation": "capital of", "tail": "Bengaluru"},
+            {"head": "Tamil Nadu", "relation": "capital of", "tail": "Chennai"},
+            {"head": "Kerala", "relation": "capital of", "tail": "Thiruvananthapuram"},
+            {"head": "Andhra Pradesh", "relation": "capital of", "tail": "Amaravati"},
+            {"head": "Uttar Pradesh", "relation": "capital of", "tail": "Lucknow"},
+            {"head": "Bihar", "relation": "capital of", "tail": "Patna"},
+            {"head": "West Bengal", "relation": "capital of", "tail": "Kolkata"},
+            {"head": "Gujarat", "relation": "capital of", "tail": "Gandhinagar"},
+            {"head": "Rajasthan", "relation": "capital of", "tail": "Jaipur"},
+            {"head": "Madhya Pradesh", "relation": "capital of", "tail": "Bhopal"},
+            {"head": "Punjab", "relation": "capital of", "tail": "Chandigarh"},
+            {"head": "Haryana", "relation": "capital of", "tail": "Chandigarh"},
+            {"head": "Odisha", "relation": "capital of", "tail": "Bhubaneswar"},
+            {"head": "Assam", "relation": "capital of", "tail": "Dispur"},
+            {"head": "Jharkhand", "relation": "capital of", "tail": "Ranchi"},
+            {"head": "Chhattisgarh", "relation": "capital of", "tail": "Raipur"},
+            {"head": "Uttarakhand", "relation": "capital of", "tail": "Dehradun"},
+            {"head": "Himachal Pradesh", "relation": "capital of", "tail": "Shimla"},
+            {"head": "Goa", "relation": "capital of", "tail": "Panaji"}
+        ]
+    },
+    {
+        "query": "Which rivers flow through Maharashtra?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Maharashtra'\n  FOR v, e, p IN 1..1 INBOUND start india_node_to_india_node\n    FILTER e.relationship == 'flows through'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Godavari", "relation": "flows through", "tail": "Maharashtra"},
+            {"head": "Tapi", "relation": "flows through", "tail": "Maharashtra"}
+        ]
+    },
+    {
+        "query": "What are the traditional dance forms of Maharashtra?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Maharashtra'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'has traditional dance form'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Maharashtra", "relation": "has traditional dance form", "tail": "Lavani"},
+            {"head": "Maharashtra", "relation": "has traditional dance form", "tail": "Koli"}
+        ]
+    },
+    {
+        "query": "Which states border Maharashtra?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Maharashtra'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship IN ['borders', 'shares border with']\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Maharashtra", "relation": "borders", "tail": "Madhya Pradesh"},
+            {"head": "Maharashtra", "relation": "borders", "tail": "Chhattisgarh"},
+            {"head": "Maharashtra", "relation": "borders", "tail": "Telangana"},
+            {"head": "Maharashtra", "relation": "borders", "tail": "Karnataka"},
+            {"head": "Maharashtra", "relation": "borders", "tail": "Goa"},
+            {"head": "Maharashtra", "relation": "borders", "tail": "Gujarat"}
+        ]
+    },
+    {
+        "query": "What are the famous dishes of Maharashtra?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Maharashtra'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'is famous for'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Maharashtra", "relation": "is famous for", "tail": "Vada Pav"},
+            {"head": "Maharashtra", "relation": "is famous for", "tail": "Pav Bhaji"},
+            {"head": "Maharashtra", "relation": "is famous for", "tail": "Puran Poli"}
+        ]
+    },
+    {
+        "query": "Which freedom fighters were from Maharashtra?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name IN ['Bal Gangadhar Tilak', 'Gopal Krishna Gokhale', 'Vinayak Damodar Savarkar']\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'fought for' AND v.name == 'Indian Independence'\n    RETURN DISTINCT start.name",
+        "ground_truth": [
+            {"head": "Bal Gangadhar Tilak", "relation": "fought for", "tail": "Indian Independence"},
+            {"head": "Gopal Krishna Gokhale", "relation": "fought for", "tail": "Indian Independence"},
+            {"head": "Vinayak Damodar Savarkar", "relation": "fought for", "tail": "Indian Independence"}
+        ]
+    },
+    {
+        "query": "What are the official languages of Indian states?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'India'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'has official language'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Maharashtra", "relation": "has official language", "tail": "Marathi"},
+            {"head": "Karnataka", "relation": "has official language", "tail": "Kannada"},
+            {"head": "Tamil Nadu", "relation": "has official language", "tail": "Tamil"},
+            {"head": "Kerala", "relation": "has official language", "tail": "Malayalam"},
+            {"head": "Andhra Pradesh", "relation": "has official language", "tail": "Telugu"},
+            {"head": "Uttar Pradesh", "relation": "has official language", "tail": "Hindi"},
+            {"head": "Bihar", "relation": "has official language", "tail": "Hindi"},
+            {"head": "West Bengal", "relation": "has official language", "tail": "Bengali"},
+            {"head": "Gujarat", "relation": "has official language", "tail": "Gujarati"},
+            {"head": "Rajasthan", "relation": "has official language", "tail": "Hindi"},
+            {"head": "Madhya Pradesh", "relation": "has official language", "tail": "Hindi"},
+            {"head": "Punjab", "relation": "has official language", "tail": "Punjabi"},
+            {"head": "Haryana", "relation": "has official language", "tail": "Hindi"},
+            {"head": "Odisha", "relation": "has official language", "tail": "Odia"},
+            {"head": "Assam", "relation": "has official language", "tail": "Assamese"},
+            {"head": "Jharkhand", "relation": "has official language", "tail": "Hindi"},
+            {"head": "Chhattisgarh", "relation": "has official language", "tail": "Hindi"},
+            {"head": "Uttarakhand", "relation": "has official language", "tail": "Hindi"},
+            {"head": "Himachal Pradesh", "relation": "has official language", "tail": "Hindi"},
+            {"head": "Goa", "relation": "has official language", "tail": "Konkani"}
+        ]
+    },
+    {
+        "query": "Which states celebrate Pongal?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Pongal'\n  FOR v, e, p IN 1..1 INBOUND start india_node_to_india_node\n    FILTER e.relationship == 'celebrates'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Tamil Nadu", "relation": "celebrates", "tail": "Pongal"}
+        ]
+    },
+    {
+        "query": "What are the famous monuments in Uttar Pradesh?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Uttar Pradesh'\n  FOR v, e, p IN 1..1 INBOUND start india_node_to_india_node\n    FILTER e.relationship == 'is located in'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Taj Mahal", "relation": "is located in", "tail": "Uttar Pradesh"},
+            {"head": "Fatehpur Sikri", "relation": "is located in", "tail": "Uttar Pradesh"}
+        ]
+    },
+    {
+        "query": "Which states share border with Pakistan?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'India'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'shares border with' AND v.name == 'Pakistan'\n    RETURN DISTINCT start.name",
+        "ground_truth": [
+            {"head": "India", "relation": "shares border with", "tail": "Pakistan"}
+        ]
+    },
+    {
+        "query": "What are the traditional dance forms of Kerala?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Kerala'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'has traditional dance form'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Kerala", "relation": "has traditional dance form", "tail": "Kathakali"},
+            {"head": "Kerala", "relation": "has traditional dance form", "tail": "Mohiniyattam"}
+        ]
+    },
+    {
+        "query": "Which freedom fighters were from West Bengal?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name IN ['Subhash Chandra Bose', 'Khudiram Bose', 'Rash Behari Bose']\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'fought for' AND v.name == 'Indian Independence'\n    RETURN DISTINCT start.name",
+        "ground_truth": [
+            {"head": "Subhash Chandra Bose", "relation": "fought for", "tail": "Indian Independence"},
+            {"head": "Khudiram Bose", "relation": "fought for", "tail": "Indian Independence"},
+            {"head": "Rash Behari Bose", "relation": "fought for", "tail": "Indian Independence"}
+        ]
+    },
+    {
+        "query": "What are the famous dishes of Punjab?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Punjab'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'is famous for'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Punjab", "relation": "is famous for", "tail": "Makki di Roti"},
+            {"head": "Punjab", "relation": "is famous for", "tail": "Sarson da Saag"},
+            {"head": "Punjab", "relation": "is famous for", "tail": "Butter Chicken"}
+        ]
+    },
+    {
+        "query": "Which states border Karnataka?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Karnataka'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship IN ['borders', 'shares border with']\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Karnataka", "relation": "borders", "tail": "Maharashtra"},
+            {"head": "Karnataka", "relation": "borders", "tail": "Goa"},
+            {"head": "Karnataka", "relation": "borders", "tail": "Kerala"},
+            {"head": "Karnataka", "relation": "borders", "tail": "Tamil Nadu"},
+            {"head": "Karnataka", "relation": "borders", "tail": "Andhra Pradesh"},
+            {"head": "Karnataka", "relation": "borders", "tail": "Telangana"}
+        ]
+    },
+    {
+        "query": "What are the famous monuments in Delhi?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Delhi'\n  FOR v, e, p IN 1..1 INBOUND start india_node_to_india_node\n    FILTER e.relationship == 'is located in'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Red Fort", "relation": "is located in", "tail": "Delhi"},
+            {"head": "Qutub Minar", "relation": "is located in", "tail": "Delhi"},
+            {"head": "India Gate", "relation": "is located in", "tail": "Delhi"}
+        ]
+    },
+    {
+        "query": "Which rivers flow through Assam?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Assam'\n  FOR v, e, p IN 1..1 INBOUND start india_node_to_india_node\n    FILTER e.relationship == 'flows through'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Brahmaputra", "relation": "flows through", "tail": "Assam"}
+        ]
+    },
+    {
+        "query": "What are the traditional dance forms of Tamil Nadu?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Tamil Nadu'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'has traditional dance form'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Tamil Nadu", "relation": "has traditional dance form", "tail": "Bharatanatyam"},
+            {"head": "Tamil Nadu", "relation": "has traditional dance form", "tail": "Karakattam"}
+        ]
+    },
+    {
+        "query": "Which freedom fighters were from Gujarat?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name IN ['Mahatma Gandhi', 'Sardar Vallabhbhai Patel', 'Dadabhai Naoroji']\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'fought for' AND v.name == 'Indian Independence'\n    RETURN DISTINCT start.name",
+        "ground_truth": [
+            {"head": "Mahatma Gandhi", "relation": "fought for", "tail": "Indian Independence"},
+            {"head": "Sardar Vallabhbhai Patel", "relation": "fought for", "tail": "Indian Independence"},
+            {"head": "Dadabhai Naoroji", "relation": "fought for", "tail": "Indian Independence"}
+        ]
+    },
+    {
+        "query": "What are the famous dishes of West Bengal?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'West Bengal'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'is famous for'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "West Bengal", "relation": "is famous for", "tail": "Rasgulla"},
+            {"head": "West Bengal", "relation": "is famous for", "tail": "Macher Jhol"},
+            {"head": "West Bengal", "relation": "is famous for", "tail": "Mishti Doi"}
+        ]
+    },
+    {
+        "query": "Which states border Bihar?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Bihar'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship IN ['borders', 'shares border with']\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Bihar", "relation": "borders", "tail": "Uttar Pradesh"},
+            {"head": "Bihar", "relation": "borders", "tail": "Jharkhand"},
+            {"head": "Bihar", "relation": "borders", "tail": "West Bengal"}
+        ]
+    },
+    {
+        "query": "What are the famous monuments in Rajasthan?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Rajasthan'\n  FOR v, e, p IN 1..1 INBOUND start india_node_to_india_node\n    FILTER e.relationship == 'is located in'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Hawa Mahal", "relation": "is located in", "tail": "Rajasthan"},
+            {"head": "Amber Fort", "relation": "is located in", "tail": "Rajasthan"}
+        ]
+    },
+    {
+        "query": "Which rivers flow through Tamil Nadu?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Tamil Nadu'\n  FOR v, e, p IN 1..1 INBOUND start india_node_to_india_node\n    FILTER e.relationship == 'flows through'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Kaveri", "relation": "flows through", "tail": "Tamil Nadu"}
+        ]
+    },
+    {
+        "query": "What are the traditional dance forms of Gujarat?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Gujarat'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'has traditional dance form'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Gujarat", "relation": "has traditional dance form", "tail": "Garba"},
+            {"head": "Gujarat", "relation": "has traditional dance form", "tail": "Dandiya"}
+        ]
+    },
+    {
+        "query": "Which freedom fighters were from Punjab?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name IN ['Bhagat Singh', 'Lala Lajpat Rai', 'Udham Singh']\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'fought for' AND v.name == 'Indian Independence'\n    RETURN DISTINCT start.name",
+        "ground_truth": [
+            {"head": "Bhagat Singh", "relation": "fought for", "tail": "Indian Independence"},
+            {"head": "Lala Lajpat Rai", "relation": "fought for", "tail": "Indian Independence"},
+            {"head": "Udham Singh", "relation": "fought for", "tail": "Indian Independence"}
+        ]
+    },
+    {
+        "query": "What are the famous dishes of Tamil Nadu?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Tamil Nadu'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'is famous for'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Tamil Nadu", "relation": "is famous for", "tail": "Dosa"},
+            {"head": "Tamil Nadu", "relation": "is famous for", "tail": "Idli"},
+            {"head": "Tamil Nadu", "relation": "is famous for", "tail": "Pongal"}
+        ]
+    },
+    {
+        "query": "Which states border Uttar Pradesh?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Uttar Pradesh'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship IN ['borders', 'shares border with']\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Uttar Pradesh", "relation": "borders", "tail": "Uttarakhand"},
+            {"head": "Uttar Pradesh", "relation": "borders", "tail": "Himachal Pradesh"},
+            {"head": "Uttar Pradesh", "relation": "borders", "tail": "Haryana"},
+            {"head": "Uttar Pradesh", "relation": "borders", "tail": "Delhi"},
+            {"head": "Uttar Pradesh", "relation": "borders", "tail": "Rajasthan"},
+            {"head": "Uttar Pradesh", "relation": "borders", "tail": "Madhya Pradesh"},
+            {"head": "Uttar Pradesh", "relation": "borders", "tail": "Chhattisgarh"},
+            {"head": "Uttar Pradesh", "relation": "borders", "tail": "Bihar"},
+            {"head": "Uttar Pradesh", "relation": "borders", "tail": "Jharkhand"}
+        ]
+    },
+    {
+        "query": "What are the famous monuments in Maharashtra?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Maharashtra'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'is located in'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Gateway of India", "relation": "is located in", "tail": "Maharashtra"},
+            {"head": "Ajanta Caves", "relation": "is located in", "tail": "Maharashtra"},
+            {"head": "Aga Khan Palace", "relation": "is located in", "tail": "Maharashtra"}
+        ]
+    },
+    {
+        "query": "Which rivers flow through Andhra Pradesh?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Andhra Pradesh'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'flows through'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Krishna", "relation": "flows through", "tail": "Andhra Pradesh"}
+        ]
+    },
+    {
+        "query": "What are the traditional dance forms of Punjab?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Punjab'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'has traditional dance form'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Punjab", "relation": "has traditional dance form", "tail": "Bhangra"},
+            {"head": "Punjab", "relation": "has traditional dance form", "tail": "Giddha"}
+        ]
+    },
+    {
+        "query": "Which freedom fighters were from Tamil Nadu?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name IN ['Subramania Bharati', 'V.O. Chidambaram Pillai', 'C. Rajagopalachari']\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'fought for' AND v.name == 'Indian Independence'\n    RETURN DISTINCT start.name",
+        "ground_truth": [
+            {"head": "Subramania Bharati", "relation": "fought for", "tail": "Indian Independence"},
+            {"head": "V.O. Chidambaram Pillai", "relation": "fought for", "tail": "Indian Independence"},
+            {"head": "C. Rajagopalachari", "relation": "fought for", "tail": "Indian Independence"}
+        ]
+    },
+    {
+        "query": "What are the famous dishes of Kerala?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Kerala'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'is famous for'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Kerala", "relation": "is famous for", "tail": "Appam"},
+            {"head": "Kerala", "relation": "is famous for", "tail": "Puttu"},
+            {"head": "Kerala", "relation": "is famous for", "tail": "Karimeen Pollichathu"}
+        ]
+    },
+    {
+        "query": "Which states border West Bengal?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'West Bengal'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship IN ['borders', 'shares border with']\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "West Bengal", "relation": "borders", "tail": "Bihar"},
+            {"head": "West Bengal", "relation": "borders", "tail": "Jharkhand"},
+            {"head": "West Bengal", "relation": "borders", "tail": "Odisha"},
+            {"head": "West Bengal", "relation": "borders", "tail": "Assam"}
+        ]
+    },
+    {
+        "query": "What are the famous monuments in Tamil Nadu?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Tamil Nadu'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'is located in'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Brihadeeswarar Temple", "relation": "is located in", "tail": "Tamil Nadu"},
+            {"head": "Meenakshi Temple", "relation": "is located in", "tail": "Tamil Nadu"}
+        ]
+    },
+    {
+        "query": "Which rivers flow through Madhya Pradesh?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Madhya Pradesh'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'flows through'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Narmada", "relation": "flows through", "tail": "Madhya Pradesh"}
+        ]
+    },
+    {
+        "query": "What are the traditional dance forms of Rajasthan?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Rajasthan'\n  FOR v, e, p IN 1..1 INBOUND start india_node_to_india_node\n    FILTER e.relationship == 'has traditional dance form'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Rajasthan", "relation": "has traditional dance form", "tail": "Ghoomar"},
+            {"head": "Rajasthan", "relation": "has traditional dance form", "tail": "Kalbelia"}
+        ]
+    },
+    {
+        "query": "Which freedom fighters were from Kerala?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name IN ['K. Kelappan', 'A.K. Gopalan', 'Vakkom Moulavi']\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'fought for' AND v.name == 'Indian Independence'\n    RETURN DISTINCT start.name",
+        "ground_truth": [
+            {"head": "K. Kelappan", "relation": "fought for", "tail": "Indian Independence"},
+            {"head": "A.K. Gopalan", "relation": "fought for", "tail": "Indian Independence"},
+            {"head": "Vakkom Moulavi", "relation": "fought for", "tail": "Indian Independence"}
+        ]
+    },
+    {
+        "query": "What are the famous dishes of Gujarat?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Gujarat'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'is famous for'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Gujarat", "relation": "is famous for", "tail": "Dhokla"},
+            {"head": "Gujarat", "relation": "is famous for", "tail": "Thepla"},
+            {"head": "Gujarat", "relation": "is famous for", "tail": "Khandvi"}
+        ]
+    },
+    {
+        "query": "Which states border Assam?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Assam'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship IN ['borders', 'shares border with']\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Assam", "relation": "borders", "tail": "Arunachal Pradesh"},
+            {"head": "Assam", "relation": "borders", "tail": "Nagaland"},
+            {"head": "Assam", "relation": "borders", "tail": "Manipur"},
+            {"head": "Assam", "relation": "borders", "tail": "Mizoram"},
+            {"head": "Assam", "relation": "borders", "tail": "Tripura"},
+            {"head": "Assam", "relation": "borders", "tail": "Meghalaya"},
+            {"head": "Assam", "relation": "borders", "tail": "West Bengal"}
+        ]
+    },
+    {
+        "query": "What are the famous monuments in Odisha?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Odisha'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'is located in'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Konark Sun Temple", "relation": "is located in", "tail": "Odisha"},
+            {"head": "Jagannath Temple", "relation": "is located in", "tail": "Odisha"}
+        ]
+    },
+    {
+        "query": "Which rivers flow through Odisha?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Odisha'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'flows through'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Mahanadi", "relation": "flows through", "tail": "Odisha"}
+        ]
+    },
+    {
+        "query": "What are the traditional dance forms of Uttar Pradesh?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Uttar Pradesh'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'has traditional dance form'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Uttar Pradesh", "relation": "has traditional dance form", "tail": "Kathak"},
+            {"head": "Uttar Pradesh", "relation": "has traditional dance form", "tail": "Raslila"}
+        ]
+    },
+    {
+        "query": "Which freedom fighters were from Bihar?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name IN ['Jayaprakash Narayan', 'Rajendra Prasad', 'Anugrah Narayan Sinha']\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'fought for' AND v.name == 'Indian Independence'\n    RETURN DISTINCT start.name",
+        "ground_truth": [
+            {"head": "Jayaprakash Narayan", "relation": "fought for", "tail": "Indian Independence"},
+            {"head": "Rajendra Prasad", "relation": "fought for", "tail": "Indian Independence"},
+            {"head": "Anugrah Narayan Sinha", "relation": "fought for", "tail": "Indian Independence"}
+        ]
+    },
+    {
+        "query": "What are the famous dishes of Rajasthan?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Rajasthan'\n  FOR v, e, p IN 1..1 INBOUND start india_node_to_india_node\n    FILTER e.relationship == 'is famous for'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Rajasthan", "relation": "is famous for", "tail": "Dal Baati Churma"},
+            {"head": "Rajasthan", "relation": "is famous for", "tail": "Ghewar"},
+            {"head": "Rajasthan", "relation": "is famous for", "tail": "Laal Maas"}
+        ]
+    },
+    {
+        "query": "Which states border Jharkhand?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Jharkhand'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship IN ['borders', 'shares border with']\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Jharkhand", "relation": "borders", "tail": "Bihar"},
+            {"head": "Jharkhand", "relation": "borders", "tail": "West Bengal"},
+            {"head": "Jharkhand", "relation": "borders", "tail": "Odisha"},
+            {"head": "Jharkhand", "relation": "borders", "tail": "Chhattisgarh"},
+            {"head": "Jharkhand", "relation": "borders", "tail": "Uttar Pradesh"}
+        ]
+    },
+    {
+        "query": "What are the famous monuments in Karnataka?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Karnataka'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'is located in'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Hampi", "relation": "is located in", "tail": "Karnataka"},
+            {"head": "Mysore Palace", "relation": "is located in", "tail": "Karnataka"}
+        ]
+    },
+    {
+        "query": "Which rivers flow through Jammu and Kashmir?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'Jammu and Kashmir'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'flows through'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "Indus", "relation": "flows through", "tail": "Jammu and Kashmir"}
+        ]
+    },
+    {
+        "query": "What are the traditional dance forms of West Bengal?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name == 'West Bengal'\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'has traditional dance form'\n    RETURN DISTINCT v.name",
+        "ground_truth": [
+            {"head": "West Bengal", "relation": "has traditional dance form", "tail": "Gaudiya Nritya"}
+        ]
+    },
+    {
+        "query": "Which freedom fighters were from Odisha?",
+        "aql_query": "WITH india_node, india_node_to_india_node\nFOR start IN india_node\n  FILTER start.name IN ['Gopabandhu Das', 'Biju Patnaik', 'Utkal Gourav Madhusudan Das']\n  FOR v, e, p IN 1..1 OUTBOUND start india_node_to_india_node\n    FILTER e.relationship == 'fought for' AND v.name == 'Indian Independence'\n    RETURN DISTINCT start.name",
+        "ground_truth": [
+            {"head": "Gopabandhu Das", "relation": "fought for", "tail": "Indian Independence"},
+            {"head": "Biju Patnaik", "relation": "fought for", "tail": "Indian Independence"},
+            {"head": "Utkal Gourav Madhusudan Das", "relation": "fought for", "tail": "Indian Independence"}
+        ]
+    }
+] 
