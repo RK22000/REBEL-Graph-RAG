@@ -1,5 +1,7 @@
 import React from "react";
 import { Bot, User } from "lucide-react";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface ChatMessageProps {
   isAi: boolean;
@@ -15,7 +17,11 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
           <Bot size={18} className="text-orange-400" />
         </div>}
       <div className={`max-w-[80%] p-4 rounded-xl shadow-lg ${isAi ? "bg-gradient-to-r from-orange-500/50 to-pink-500/50 text-black border border-orange-400/50" : "bg-gradient-to-r from-yellow-400 to-orange-500 text-black"}`}>
-        <p className="text-sm md:text-base">{message}</p>
+        <div className="prose prose-sm md:prose-base max-w-none">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {message}
+          </ReactMarkdown>
+        </div>
       </div>
       {!isAi && <div className="w-8 h-8 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center">
           <User size={18} className="text-black" />
