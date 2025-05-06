@@ -4,7 +4,7 @@
 /* Custom scrollbar styles */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgb(96 165 250) transparent;
+  scrollbar-color: rgb(249 115 22) transparent;
 }
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
@@ -14,6 +14,6 @@
   background: transparent;
 }
 *::-webkit-scrollbar-thumb {
-  background-color: rgb(96 165 250);
+  background-color: rgb(249 115 22);
   border-radius: 20px;
 }
