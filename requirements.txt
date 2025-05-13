@@ -1,4 +1,5 @@
 transformers 
+sentence-transformers
 wikipedia 
 newspaper3k 
 GoogleNews 
