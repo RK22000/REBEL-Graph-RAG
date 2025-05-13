@@ -1,8 +1,11 @@
+## Graph-Rag pipeline
+
 Install dependencies in your venv
 ```
 pip install -Ur requirements.txt
 ```
-run the server (dev mode, auto reloads on file change)
+
+run the REBEL server (dev mode, auto reloads on file change)
 ```
 fastapi dev server.py
 ```
@@ -25,3 +28,11 @@ curl -X POST \
 ```
 
 curl -X POST http://localhost:8001/query -H 'Content-Type: application/json' -d '{"query": "What is the relationship between Node2Vec and random walks?"}'
+
+## Knowledge graph analysis
+
+Unpack the data.zip into project root. Analysis of the graph is done in the following sections.
+
+
+Section (## Analyze relations in collected articles) is where the knowledge graph properties is analyzed.
+Section (## Knowledge graph embedding experiment) is where the TransE and TransR experiments were done.

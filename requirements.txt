@@ -19,4 +19,5 @@ nx-arangodb
 uvicorn
 tqdm
 fastapi[standard]
-
+wikipedia-api==0.6.0
+pykeen
